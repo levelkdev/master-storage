@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "../Storage/MasterStorage.sol";
+import "../Core/MasterStorage.sol";
 
 contract ERC20Controller is MasterStorage {
   using SafeMath for uint256;

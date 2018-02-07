@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import "../Controllers/ERC20Controller.sol";
-import "../Storage/MasterStorage.sol";
+import "../Core/MasterStorage.sol";
 
 contract MyToken {
 

@@ -12,9 +12,9 @@ contract UpgradableProxy is BaseProxy {
     return _implementation;
   }
 
-  function upgradeTo(address implementation) public {
-    require(_implementation != implementation);
-    _implementation = implementation;
-    Upgraded(implementation);
+  function upgradeTo(address impl) public {
+    require(_implementation != impl);
+    _implementation = impl;
+    Upgraded(impl);
   }
 }

@@ -1,23 +1,22 @@
 pragma solidity ^0.4.18;
 
-import "../Controllers/ERC20Controller.sol";
+import "../Libraries/ERC20Lib.sol";
 import "../Core/MasterStorage.sol";
 
 contract MyToken {
+  using ERC20Lib for ERC20Lib.StoreContainer;
+  ERC20Lib.StoreContainer erc20;
 
   event Transfer(address indexed from, address indexed to, uint value);
   event Approval(address indexed owner, address indexed spender, uint value);
 
-  ERC20Controller _store;
-
-  function MyToken(ERC20Controller erc20Controller, MasterStorage store, uint256 initialSupply) public {
-    _store = ERC20Controller(store);
-    _store.setProxy(erc20Controller);
-    _store.addSupply(initialSupply);
+  function MyToken(MasterStorage store, uint256 initialSupply) public {
+    erc20.store = store;
+    erc20.addSupply(initialSupply);
   }
 
   function totalSupply() public view returns (uint256) {
-    return _store.totalSupply();
+    return erc20.totalSupply();
   }
 
 }

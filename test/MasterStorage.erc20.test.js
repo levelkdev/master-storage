@@ -6,18 +6,19 @@ import { expect } from 'chai'
 // const accounts = web3.eth.accounts
 
 const MasterStorage = artifacts.require('MasterStorage')
-const ERC20Controller = artifacts.require('ERC20Controller')
+const ERC20Lib = artifacts.require('ERC20Lib')
 const MyToken = artifacts.require('MyToken')
 
 describe('MasterStorage Patterns', () => {
   describe('creating two tokens that use MasterStorage and ERC20Controller', async () => {
-    let myToken1, myToken2
+    let myToken1, myToken2, masterStorage, erc20Lib
 
     beforeEach(async () => {
-      const masterStorage = await MasterStorage.new()
-      const erc20Controller = await ERC20Controller.new()
-      myToken1 = await MyToken.new(erc20Controller.address, masterStorage.address, 10 * 10 ** 18)
-      myToken2 = await MyToken.new(erc20Controller.address, masterStorage.address, 45 * 10 ** 18)
+      masterStorage = await MasterStorage.new()
+      erc20Lib = await ERC20Lib.new()
+      MyToken.link('ERC20Lib', erc20Lib.address)
+      myToken1 = await MyToken.new(masterStorage.address, 10 * 10 ** 18)
+      myToken2 = await MyToken.new(masterStorage.address, 45 * 10 ** 18)
     })
 
     it('should keep separate state for each token', async () => {

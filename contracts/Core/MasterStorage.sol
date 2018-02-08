@@ -1,8 +1,6 @@
 pragma solidity ^0.4.18;
 
-import "./PublicProxy.sol";
-
-contract MasterStorage is PublicProxy {
+contract MasterStorage {
 
   /**** Ownership Mappings ***********/
 
@@ -65,7 +63,19 @@ contract MasterStorage is PublicProxy {
     _addressStorage[keyAddress()][key] = value;
   }
 
+  address _tmpSender;
+  function getTmpSender() public view returns (address) {
+    return _tmpSender;
+  }
+
+  uint256 _tmpInt;
+  function getTmpInt() public view returns (uint256) {
+    return _tmpInt;
+  }
+
   function setUint(bytes32 key, uint value) public keyAddressIsLive {
+      _tmpInt = 112233;
+      _tmpSender = keyAddress();
       _uintStorage[keyAddress()][key] = value;
   }
 

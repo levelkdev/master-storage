@@ -1,22 +1,18 @@
 pragma solidity ^0.4.18;
 
 import "../Libraries/ERC20Lib.sol";
-import "../Core/MasterStorage.sol";
+import "../Delegates/ERC20Delegate.sol";
+import "../Core/Proxy/OwnableProxy.sol";
+import "../Core/Storage/MasterStorage.sol";
 
-contract MyToken {
+contract MyToken is OwnableProxy {
   using ERC20Lib for ERC20Lib.StoreContainer;
-  ERC20Lib.StoreContainer erc20;
+  ERC20Lib.StoreContainer _erc20;
 
-  event Transfer(address indexed from, address indexed to, uint value);
-  event Approval(address indexed owner, address indexed spender, uint value);
-
-  function MyToken(MasterStorage store, uint256 initialSupply) public {
-    erc20.store = store;
-    erc20.addSupply(initialSupply);
-  }
-
-  function totalSupply() public view returns (uint256) {
-    return erc20.totalSupply();
+  function MyToken(ERC20Delegate erc20Delegate, MasterStorage store, uint256 initialSupply) public {
+    upgradeTo(erc20Delegate);
+    _erc20.store = store;
+    _erc20.addSupply(initialSupply);
   }
 
 }

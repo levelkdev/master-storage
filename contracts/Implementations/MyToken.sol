@@ -5,13 +5,18 @@ import "../Delegates/ERC20Delegate.sol";
 import "../Core/Proxy/OwnableProxy.sol";
 import "../Core/Storage/MasterStorage.sol";
 import "../Core/Storage/StorageConsumer.sol";
+import "../Core/Storage/StorageLib.sol";
 
 contract MyToken is StorageConsumer, OwnableProxy {
 
-  function MyToken(ERC20Delegate erc20Delegate, MasterStorage store, uint256 initialSupply) public {
-    _store = store;
+  using ERC20Lib for StorageLib.Data;
+
+  function MyToken(ERC20Delegate erc20Delegate, MasterStorage store, uint256 initialSupply)
+    StorageConsumer(store)
+    public
+  {
     upgradeTo(erc20Delegate);
-    ERC20Lib.addSupply(store, initialSupply);
+    _data.addSupply(initialSupply);
   }
 
 }

@@ -8,19 +8,13 @@ library ERC20Lib {
 
   struct StoreContainer { address store; }
 
-  function addSupply(StoreContainer storage storeContainer, uint256 amount) public {
-    MasterStorage ms = MasterStorage(storeContainer.store);
-    uint256 totalSupply = ms.getUint("totalSupply");
-    ms.setUint("totalSupply", totalSupply.add(amount));
+  function addSupply(MasterStorage store, uint256 amount) public {
+    uint256 totalSupply = store.getUint("totalSupply");
+    store.setUint("totalSupply", totalSupply.add(amount));
   }
 
-  function getMS(StoreContainer storage storeContainer) public view returns (address) {
-    return storeContainer.store;
-  }
-
-  function totalSupply(StoreContainer storage storeContainer) public view returns (uint256) {
-    MasterStorage ms = MasterStorage(storeContainer.store);
-    return ms.getUint("totalSupply");
+  function totalSupply(MasterStorage store) public view returns (uint256) {
+    return store.getUint("totalSupply");
   }
 
 }

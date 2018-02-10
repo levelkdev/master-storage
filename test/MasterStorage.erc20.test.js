@@ -34,9 +34,7 @@ describe('MasterStorage Patterns', () => {
       erc20Token2 = ERC20Delegate.at(myToken2.address)
     })
 
-    it('should keep separate state for each token', async () => {
-      // const token1TotalSupply = await erc20Token1.getMS()
-      // console.log('TOTAL SUPPLY: ', token1TotalSupply)
+    it.only('should keep separate state for each token', async () => {
       const token1TotalSupply = (await erc20Token1.totalSupply()).toNumber()
       const token2TotalSupply = (await erc20Token2.totalSupply()).toNumber()
       expect(token1TotalSupply).to.equal(10 * 10 ** 18)

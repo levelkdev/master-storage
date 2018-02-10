@@ -1,9 +1,8 @@
 pragma solidity ^0.4.18;
 
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./BaseProxy.sol";
 
-contract OwnableProxy is BaseProxy, Ownable {
+contract OwnableProxy is BaseProxy {
 
   event Upgraded(address indexed implementation);
 
@@ -13,7 +12,7 @@ contract OwnableProxy is BaseProxy, Ownable {
     return _implementation;
   }
 
-  function upgradeTo(address impl) public onlyOwner {
+  function upgradeTo(address impl) public {
     require(_implementation != impl);
     _implementation = impl;
     Upgraded(impl);

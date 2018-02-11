@@ -16,19 +16,19 @@ describe('MasterStorage Patterns', () => {
 
     beforeEach(async () => {
       erc20Lib = await ERC20Lib.new()
-      console.log('erc20Lib address: ', erc20Lib.address)
+      // console.log('erc20Lib address: ', erc20Lib.address)
       MyToken.link('ERC20Lib', erc20Lib.address)
       ERC20Delegate.link('ERC20Lib', erc20Lib.address)
 
       masterStorage = await MasterStorage.new()
-      console.log('masterStorage address: ', masterStorage.address)
+      // console.log('masterStorage address: ', masterStorage.address)
       erc20 = await ERC20Delegate.new()
-      console.log('erc20Del address: ', erc20.address)
+      // console.log('erc20Del address: ', erc20.address)
 
       myToken1 = await MyToken.new(erc20.address, masterStorage.address, 10 * 10 ** 18)
-      console.log('myToken1 address: ', myToken1.address)
+      // console.log('myToken1 address: ', myToken1.address)
       myToken2 = await MyToken.new(erc20.address, masterStorage.address, 45 * 10 ** 18)
-      console.log('myToken2 address: ', myToken2.address)
+      // console.log('myToken2 address: ', myToken2.address)
 
       erc20Token1 = ERC20Delegate.at(myToken1.address)
       erc20Token2 = ERC20Delegate.at(myToken2.address)

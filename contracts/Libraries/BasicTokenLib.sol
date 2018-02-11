@@ -4,7 +4,7 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../Core/Storage/MasterStorage.sol";
 import "../Core/Storage/StorageLib.sol";
 
-library ERC20Lib {
+library BasicTokenLib {
   using SafeMath for uint256;
 
   function getBalance(StorageLib.Storage storage self, address balanceHolder) public view returns (uint256) {

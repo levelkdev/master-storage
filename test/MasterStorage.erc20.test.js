@@ -6,39 +6,40 @@ import { expect } from 'chai'
 // const accounts = web3.eth.accounts
 
 const MasterStorage = artifacts.require('MasterStorage')
-const ERC20Delegate = artifacts.require('ERC20Delegate')
-const ERC20Lib = artifacts.require('ERC20Lib')
+const BasicTokenDelegate = artifacts.require('BasicTokenDelegate')
+const BasicTokenLib = artifacts.require('BasicTokenLib')
 const MyToken = artifacts.require('MyToken')
 
 describe('MasterStorage Patterns', () => {
   describe('creating two tokens that use MasterStorage and ERC20Controller', async () => {
-    let myToken1, myToken2, masterStorage, erc20Lib, erc20, erc20Token1, erc20Token2
+    let myToken1, myToken2, masterStorage, basicTokenLib, basicToken
 
     beforeEach(async () => {
-      erc20Lib = await ERC20Lib.new()
-      // console.log('erc20Lib address: ', erc20Lib.address)
-      MyToken.link('ERC20Lib', erc20Lib.address)
-      ERC20Delegate.link('ERC20Lib', erc20Lib.address)
+      basicTokenLib = await BasicTokenLib.new()
+      // console.log('basicTokenLib address: ', basicTokenLib.address)
+      MyToken.link('BasicTokenLib', basicTokenLib.address)
+      BasicTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
 
       masterStorage = await MasterStorage.new()
       // console.log('masterStorage address: ', masterStorage.address)
-      erc20 = await ERC20Delegate.new()
-      // console.log('erc20Del address: ', erc20.address)
+      basicToken = await BasicTokenDelegate.new()
+      // console.log('basicTokenDel address: ', basicToken.address)
 
-      myToken1 = await MyToken.new(erc20.address, masterStorage.address, 10 * 10 ** 18)
-      // console.log('myToken1 address: ', myToken1.address)
-      myToken2 = await MyToken.new(erc20.address, masterStorage.address, 45 * 10 ** 18)
-      // console.log('myToken2 address: ', myToken2.address)
+      const myToken1Address = (await MyToken.new(basicToken.address, masterStorage.address, 10 * 10 ** 18)).address
+      // console.log('myToken1 address: ', myToken1Address)
+      const myToken2Address = (await MyToken.new(basicToken.address, masterStorage.address, 45 * 10 ** 18)).address
+      // console.log('myToken2 address: ', myToken2Address)
 
-      erc20Token1 = ERC20Delegate.at(myToken1.address)
-      erc20Token2 = ERC20Delegate.at(myToken2.address)
+      myToken1 = BasicTokenDelegate.at(myToken1Address)
+      myToken2 = BasicTokenDelegate.at(myToken2Address)
     })
 
-    it.only('should keep separate state for each token', async () => {
-      const token1TotalSupply = (await erc20Token1.totalSupply()).toNumber()
-      const token2TotalSupply = (await erc20Token2.totalSupply()).toNumber()
+    it('should keep separate state for each token', async () => {
+      const token1TotalSupply = (await myToken1.totalSupply()).toNumber()
+      const token2TotalSupply = (await myToken2.totalSupply()).toNumber()
       expect(token1TotalSupply).to.equal(10 * 10 ** 18)
       expect(token2TotalSupply).to.equal(45 * 10 ** 18)
     })
   })
+
 })

@@ -2,22 +2,20 @@ pragma solidity ^0.4.18;
 
 import "zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
-import "../Libraries/ERC20Lib.sol";
+import "../Libraries/BasicTokenLib.sol";
 import "../Core/Storage/MasterStorage.sol";
 import "../Core/Storage/StorageConsumer.sol";
 import "../Core/Storage/StorageLib.sol";
 
-contract ERC20Delegate is StorageConsumer, ERC20Basic {
+contract BasicTokenDelegate is StorageConsumer, ERC20Basic {
 
-  using ERC20Lib for StorageLib.Storage;
-
-  function ERC20Delegate(MasterStorage store) public StorageConsumer(store) { }
+  function BasicTokenDelegate(MasterStorage store) public StorageConsumer(store) { }
  
   /**
   * @dev total number of tokens in existence
   */
   function totalSupply() public view returns (uint256) {
-    return _storage.totalSupply();
+    return BasicTokenLib.totalSupply(_storage);
   }
 
   /**
@@ -27,10 +25,10 @@ contract ERC20Delegate is StorageConsumer, ERC20Basic {
   */
   function transfer(address to, uint256 value) public returns (bool) {
     require(to != address(0));
-    require(value <= _storage.getBalance(msg.sender));
+    require(value <= BasicTokenLib.getBalance(_storage, msg.sender));
 
-    _storage.subBalance(msg.sender, value);
-    _storage.addBalance(to, value);
+    BasicTokenLib.subBalance(_storage, msg.sender, value);
+    BasicTokenLib.addBalance(_storage, to, value);
     Transfer(msg.sender, to, value);
     return true;
   }
@@ -41,7 +39,7 @@ contract ERC20Delegate is StorageConsumer, ERC20Basic {
   * @return An uint256 representing the amount owned by the passed address.
   */
   function balanceOf(address owner) public view returns (uint256 balance) {
-    return _storage.getBalance(owner);
+    return BasicTokenLib.getBalance(_storage, owner);
   }
 
 }

@@ -7,28 +7,28 @@ import "../Core/Storage/StorageLib.sol";
 library ERC20Lib {
   using SafeMath for uint256;
 
-  function getBalance(StorageLib.Data storage data, address balanceHolder) public view returns (uint256) {
-    return data.store.getUint(keccak256("balances", balanceHolder));
+  function getBalance(StorageLib.Storage storage self, address balanceHolder) public view returns (uint256) {
+    return self.store.getUint(keccak256("balances", balanceHolder));
   }
 
-  function totalSupply(StorageLib.Data storage data) public view returns (uint256) {
-    return data.store.getUint("totalSupply");
+  function totalSupply(StorageLib.Storage storage self) public view returns (uint256) {
+    return self.store.getUint("totalSupply");
   }
 
-  function addSupply(StorageLib.Data storage data, uint256 amount) public {
-    data.store.setUint("totalSupply", totalSupply(data).add(amount));
+  function addSupply(StorageLib.Storage storage self, uint256 amount) public {
+    self.store.setUint("totalSupply", totalSupply(self).add(amount));
   }
 
-  function addBalance(StorageLib.Data storage data, address balanceHolder, uint256 amount) public {
-    setBalance(data, balanceHolder, getBalance(data, balanceHolder).add(amount));
+  function addBalance(StorageLib.Storage storage self, address balanceHolder, uint256 amount) public {
+    setBalance(self, balanceHolder, getBalance(self, balanceHolder).add(amount));
   }
 
-  function subBalance(StorageLib.Data storage data, address balanceHolder, uint256 amount) public {
-    setBalance(data, balanceHolder, getBalance(data, balanceHolder).sub(amount));
+  function subBalance(StorageLib.Storage storage self, address balanceHolder, uint256 amount) public {
+    setBalance(self, balanceHolder, getBalance(self, balanceHolder).sub(amount));
   }
 
-  function setBalance(StorageLib.Data storage data, address balanceHolder, uint256 amount) private {
-    data.store.setUint(keccak256("balances", balanceHolder), amount);
+  function setBalance(StorageLib.Storage storage self, address balanceHolder, uint256 amount) private {
+    self.store.setUint(keccak256("balances", balanceHolder), amount);
   }
 
 }

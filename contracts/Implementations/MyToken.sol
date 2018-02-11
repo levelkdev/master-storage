@@ -9,14 +9,14 @@ import "../Core/Storage/StorageLib.sol";
 
 contract MyToken is StorageConsumer, OwnableProxy {
 
-  using ERC20Lib for StorageLib.Data;
+  using ERC20Lib for StorageLib.Storage;
 
   function MyToken(ERC20Delegate erc20Delegate, MasterStorage store, uint256 initialSupply)
     StorageConsumer(store)
     public
   {
     upgradeTo(erc20Delegate);
-    _data.addSupply(initialSupply);
+    _storage.addSupply(initialSupply);
   }
 
 }

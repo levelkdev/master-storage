@@ -5,9 +5,9 @@ import "./StorageLib.sol";
 
 contract StorageConsumer {
 
-  StorageLib.Data _data;
+  StorageLib.Storage _storage;
 
   function StorageConsumer(MasterStorage store) public {
-    _data.store = store;
+    _storage.store = store;
   }
 }

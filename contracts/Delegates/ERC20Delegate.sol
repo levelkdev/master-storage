@@ -9,7 +9,7 @@ import "../Core/Storage/StorageLib.sol";
 
 contract ERC20Delegate is StorageConsumer, ERC20Basic {
 
-  using ERC20Lib for StorageLib.Data;
+  using ERC20Lib for StorageLib.Storage;
 
   function ERC20Delegate(MasterStorage store) public StorageConsumer(store) { }
  
@@ -17,7 +17,7 @@ contract ERC20Delegate is StorageConsumer, ERC20Basic {
   * @dev total number of tokens in existence
   */
   function totalSupply() public view returns (uint256) {
-    return _data.totalSupply();
+    return _storage.totalSupply();
   }
 
   /**
@@ -27,10 +27,10 @@ contract ERC20Delegate is StorageConsumer, ERC20Basic {
   */
   function transfer(address to, uint256 value) public returns (bool) {
     require(to != address(0));
-    require(value <= _data.getBalance(msg.sender));
+    require(value <= _storage.getBalance(msg.sender));
 
-    _data.subBalance(msg.sender, value);
-    _data.addBalance(to, value);
+    _storage.subBalance(msg.sender, value);
+    _storage.addBalance(to, value);
     Transfer(msg.sender, to, value);
     return true;
   }
@@ -41,7 +41,7 @@ contract ERC20Delegate is StorageConsumer, ERC20Basic {
   * @return An uint256 representing the amount owned by the passed address.
   */
   function balanceOf(address owner) public view returns (uint256 balance) {
-    return _data.getBalance(owner);
+    return _storage.getBalance(owner);
   }
 
 }

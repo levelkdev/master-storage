@@ -7,32 +7,51 @@ import { web3 } from './helpers/w3'
 const accounts = web3.eth.accounts
 
 const MasterStorage = artifacts.require('MasterStorage')
-const BasicTokenDelegate = artifacts.require('BasicTokenDelegate')
 const BasicTokenLib = artifacts.require('BasicTokenLib')
-const StandardTokenDelegate = artifacts.require('StandardTokenDelegate')
 const StandardTokenLib = artifacts.require('StandardTokenLib')
+const MintableTokenLib = artifacts.require('MintableTokenLib')
+const OwnableLib = artifacts.require('OwnableLib')
+const BasicTokenDelegate = artifacts.require('BasicTokenDelegate')
+const StandardTokenDelegate = artifacts.require('StandardTokenDelegate')
+const MintableTokenDelegate = artifacts.require('MintableTokenDelegate')
 const MyToken = artifacts.require('MyToken')
+const MyOwnableToken = artifacts.require('MyOwnableToken')
 
 describe('MasterStorage Patterns', () => {
-  describe('creating two tokens that use MasterStorage and ERC20Controller', async () => {
+  describe('creating three tokens that use MasterStorage and MintableTokenDelegate', async () => {
     it('should keep separate state for each token', async () => {
       const basicTokenLib = await BasicTokenLib.new()
-      MyToken.link('BasicTokenLib', basicTokenLib.address)
-      BasicTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
+      const standardTokenLib = await StandardTokenLib.new()
+      const mintableTokenLib = await MintableTokenLib.new()
+      const ownableLib = await OwnableLib.new()
+      MyOwnableToken.link('OwnableLib', ownableLib.address)
+      MintableTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
+      MintableTokenDelegate.link('StandardTokenLib', standardTokenLib.address)
+      MintableTokenDelegate.link('MintableTokenLib', mintableTokenLib.address)
+      MintableTokenDelegate.link('OwnableLib', ownableLib.address)
 
       const masterStorage = await MasterStorage.new()
-      const basicToken = await BasicTokenDelegate.new()
+      const mintableTokenDelegate = await MintableTokenDelegate.new()
 
-      const myToken1Address = (await MyToken.new(basicToken.address, masterStorage.address, 10 * 10 ** 18)).address
-      const myToken2Address = (await MyToken.new(basicToken.address, masterStorage.address, 45 * 10 ** 18)).address
+      let myToken1 = await MyOwnableToken.new(masterStorage.address)
+      let myToken2 = await MyOwnableToken.new(masterStorage.address)
+      let myToken3 = await MyOwnableToken.new(masterStorage.address)
 
-      const myToken1 = BasicTokenDelegate.at(myToken1Address)
-      const myToken2 = BasicTokenDelegate.at(myToken2Address)
+      await myToken1.upgradeTo(mintableTokenDelegate.address)
+      await myToken2.upgradeTo(mintableTokenDelegate.address)
+      await myToken3.upgradeTo(mintableTokenDelegate.address)
 
-      const token1TotalSupply = (await myToken1.totalSupply()).toNumber()
-      const token2TotalSupply = (await myToken2.totalSupply()).toNumber()
-      expect(token1TotalSupply).to.equal(10 * 10 ** 18)
-      expect(token2TotalSupply).to.equal(45 * 10 ** 18)
+      myToken1 = tokenObject(myToken1)
+      myToken2 = tokenObject(myToken2)
+      myToken3 = tokenObject(myToken3)
+
+      await myToken1.mint(accounts[1], 0.01 * 10 ** 18)
+      await myToken2.mint(accounts[1], 0.02 * 10 ** 18)
+      await myToken3.mint(accounts[1], 0.03 * 10 ** 18)
+
+      expect((await myToken1.balanceOf(accounts[1])).toNumber()).to.equal(0.01 * 10 ** 18)
+      expect((await myToken2.balanceOf(accounts[1])).toNumber()).to.equal(0.02 * 10 ** 18)
+      expect((await myToken3.balanceOf(accounts[1])).toNumber()).to.equal(0.03 * 10 ** 18)
     })
   })
 
@@ -41,7 +60,6 @@ describe('MasterStorage Patterns', () => {
       const basicTokenLib = await BasicTokenLib.new()
       const standardTokenLib = await StandardTokenLib.new()
 
-      MyToken.link('BasicTokenLib', basicTokenLib.address)
       BasicTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
       StandardTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
       StandardTokenDelegate.link('StandardTokenLib', standardTokenLib.address)
@@ -50,12 +68,14 @@ describe('MasterStorage Patterns', () => {
       const basicTokenDelegate = await BasicTokenDelegate.new()
       const standardTokenDelegate = await StandardTokenDelegate.new()
 
-      const myToken = await MyToken.new(basicTokenDelegate.address, masterStorage.address, 10 * 10 ** 18)
+      const myToken = await MyToken.new(masterStorage.address)
+      await myToken.upgradeTo(basicTokenDelegate.address)
       const myTokenBasic = _.extend(myToken, BasicTokenDelegate.at(myToken.address))
 
-      expect((await myTokenBasic.totalSupply()).toNumber()).to.equal(10 * 10 ** 18)
+      // TODO: change to name, symbol, decimal test
+      // expect((await myTokenBasic.totalSupply()).toNumber()).to.equal(10 * 10 ** 18)
 
-      await myTokenBasic.upgradeTo(standardTokenDelegate.address)
+      await myToken.upgradeTo(standardTokenDelegate.address)
       const myTokenStandard = _.extend(myToken, StandardTokenDelegate.at(myToken.address))
       await myTokenStandard.approve(accounts[2], 0.08 * 10 ** 18, { from: accounts[1] })
 
@@ -63,3 +83,12 @@ describe('MasterStorage Patterns', () => {
     })
   })
 })
+
+function tokenObject (token) {
+  return _.extend(
+    token,
+    BasicTokenDelegate.at(token.address),
+    StandardTokenDelegate.at(token.address),
+    MintableTokenDelegate.at(token.address)
+  )
+}

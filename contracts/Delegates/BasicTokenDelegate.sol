@@ -5,7 +5,6 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../Libraries/BasicTokenLib.sol";
 import "../Core/Storage/MasterStorage.sol";
 import "../Core/Storage/StorageConsumer.sol";
-import "../Core/Storage/StorageLib.sol";
 
 contract BasicTokenDelegate is StorageConsumer, ERC20Basic {
 

@@ -1,6 +1,7 @@
 /* global describe it artifacts beforeEach */
 
 import _ from 'lodash'
+import abi from 'ethereumjs-abi'
 import { expect } from 'chai'
 import { web3 } from './helpers/w3'
 
@@ -33,9 +34,9 @@ describe('MasterStorage Patterns', () => {
       const masterStorage = await MasterStorage.new()
       const mintableTokenDelegate = await MintableTokenDelegate.new()
 
-      let myToken1 = await MyOwnableToken.new(masterStorage.address)
-      let myToken2 = await MyOwnableToken.new(masterStorage.address)
-      let myToken3 = await MyOwnableToken.new(masterStorage.address)
+      let myToken1 = await MyOwnableToken.new(masterStorage.address, 'MyToken1', 'MTKONE', 18)
+      let myToken2 = await MyOwnableToken.new(masterStorage.address, 'MyToken2', 'MTKTWO', 18)
+      let myToken3 = await MyOwnableToken.new(masterStorage.address, 'MyToken3', 'MTKTHREE', 18)
 
       await myToken1.upgradeTo(mintableTokenDelegate.address)
       await myToken2.upgradeTo(mintableTokenDelegate.address)
@@ -68,12 +69,13 @@ describe('MasterStorage Patterns', () => {
       const basicTokenDelegate = await BasicTokenDelegate.new()
       const standardTokenDelegate = await StandardTokenDelegate.new()
 
-      const myToken = await MyToken.new(masterStorage.address)
+      const myToken = await MyToken.new(masterStorage.address, 'MyToken', 'MTK', 18)
       await myToken.upgradeTo(basicTokenDelegate.address)
       const myTokenBasic = _.extend(myToken, BasicTokenDelegate.at(myToken.address))
 
-      // TODO: change to name, symbol, decimal test
-      // expect((await myTokenBasic.totalSupply()).toNumber()).to.equal(10 * 10 ** 18)
+      expect(await myTokenBasic.name()).to.equal('MyToken')
+      expect(await myTokenBasic.symbol()).to.equal('MTK')
+      expect((await myTokenBasic.decimals()).toNumber()).to.equal(18)
 
       await myToken.upgradeTo(standardTokenDelegate.address)
       const myTokenStandard = _.extend(myToken, StandardTokenDelegate.at(myToken.address))

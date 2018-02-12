@@ -6,9 +6,9 @@ import "./MyToken.sol";
 
 contract MyOwnableToken is MyToken {
 
-  function MyOwnableToken(MasterStorage store)
+  function MyOwnableToken(MasterStorage store, string _name, string _symbol, uint8 _decimals)
     public
-    MyToken(store)
+    MyToken(store, _name, _symbol, _decimals)
   {
     OwnableLib.setOwner(_storage, msg.sender);
   }

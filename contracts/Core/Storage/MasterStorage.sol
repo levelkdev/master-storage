@@ -12,6 +12,7 @@ contract MasterStorage {
   mapping(address => mapping(bytes32 => string)) _stringStorage;
   mapping(address => mapping(bytes32 => address)) _addressStorage;
   mapping(address => mapping(bytes32 => bytes)) _bytesStorage;
+  mapping(address => mapping(bytes32 => bytes32)) _bytes32Storage;
   mapping(address => mapping(bytes32 => bool)) _boolStorage;
   mapping(address => mapping(bytes32 => int256)) _intStorage;
 
@@ -49,6 +50,10 @@ contract MasterStorage {
       return _bytesStorage[keyAddress()][key];
   }
 
+  function getBytes32(bytes32 key) public view keyAddressIsLive returns (bytes32) {
+      return _bytes32Storage[keyAddress()][key];
+  }
+
   function getBool(bytes32 key) public view keyAddressIsLive returns (bool) {
       return _boolStorage[keyAddress()][key];
   }
@@ -63,19 +68,7 @@ contract MasterStorage {
     _addressStorage[keyAddress()][key] = value;
   }
 
-  address _tmpSender;
-  function getTmpSender() public view returns (address) {
-    return _tmpSender;
-  }
-
-  uint256 _tmpInt;
-  function getTmpInt() public view returns (uint256) {
-    return _tmpInt;
-  }
-
   function setUint(bytes32 key, uint value) public keyAddressIsLive {
-      _tmpInt = 112233;
-      _tmpSender = keyAddress();
       _uintStorage[keyAddress()][key] = value;
   }
 
@@ -85,6 +78,10 @@ contract MasterStorage {
 
   function setBytes(bytes32 key, bytes value) public keyAddressIsLive {
       _bytesStorage[keyAddress()][key] = value;
+  }
+
+  function setBytes32(bytes32 key, bytes32 value) public keyAddressIsLive {
+      _bytes32Storage[keyAddress()][key] = value;
   }
 
   function setBool(bytes32 key, bool value) public keyAddressIsLive {
@@ -111,6 +108,10 @@ contract MasterStorage {
 
   function deleteBytes(bytes32 key) public keyAddressIsLive {
       delete _bytesStorage[keyAddress()][key];
+  }
+
+  function deleteBytes32(bytes32 key) public keyAddressIsLive {
+      delete _bytes32Storage[keyAddress()][key];
   }
 
   function deleteBool(bytes32 key) public keyAddressIsLive {

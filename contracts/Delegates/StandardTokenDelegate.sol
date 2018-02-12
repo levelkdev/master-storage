@@ -24,7 +24,7 @@ contract StandardTokenDelegate is ERC20, BasicTokenDelegate {
     require(value <= StandardTokenLib.getAllowed(_storage, from, msg.sender));
 
     BasicTokenLib.subBalance(_storage, from, value);
-    BasicTokenLib.subBalance(_storage, to, value);
+    BasicTokenLib.addBalance(_storage, to, value);
     StandardTokenLib.subAllowed(_storage, from, msg.sender, value);
     Transfer(from, to, value);
     return true;

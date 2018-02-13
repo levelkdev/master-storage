@@ -4,11 +4,9 @@ import "zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../Libraries/BasicTokenLib.sol";
 import "../Core/Storage/MasterStorage.sol";
-import "../Core/Storage/StorageConsumer.sol";
+import "../Core/Storage/StorageState.sol";
 
-contract BasicTokenDelegate is StorageConsumer, ERC20Basic {
-
-  function BasicTokenDelegate(MasterStorage store) public StorageConsumer(store) { }
+contract BasicTokenDelegate is StorageState, ERC20Basic {
  
   /**
   * @dev total number of tokens in existence

@@ -1,12 +1,9 @@
 pragma solidity ^0.4.18;
 
 import "./MasterStorage.sol";
-import "./StorageLib.sol";
+import "./StorageState.sol";
 
-contract StorageConsumer {
-
-  StorageLib.Storage _storage;
-
+contract StorageConsumer is StorageState {
   function StorageConsumer(MasterStorage store) public {
     _storage.store = store;
   }

@@ -17,12 +17,6 @@ contract MintableTokenDelegate is StandardTokenDelegate, OwnableDelegate {
   event Mint(address indexed to, uint256 amount);
   event MintFinished();
 
-  function MintableTokenDelegate(MasterStorage store)
-    public
-    StandardTokenDelegate(store)
-    OwnableDelegate(store)
-  { }
-
   modifier canMint() {
     require(!MintableTokenLib.getMintingFinished(_storage));
     _;

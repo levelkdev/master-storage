@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 import "../Core/Storage/MasterStorage.sol";
-import "../Core/Storage/StorageConsumer.sol";
+import "../Core/Storage/StorageState.sol";
 import "../Libraries/OwnableLib.sol";
 
 /**
@@ -9,11 +9,9 @@ import "../Libraries/OwnableLib.sol";
  * @dev The OwnableDelegate contract has an owner address, and provides basic authorization control
  * functions, this simplifies the implementation of "user permissions".
  */
-contract OwnableDelegate is StorageConsumer {
+contract OwnableDelegate is StorageState {
 
   event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-  function OwnableDelegate(MasterStorage store) public StorageConsumer(store) { }
 
   /**
    * @dev Throws if called by any account other than the owner.

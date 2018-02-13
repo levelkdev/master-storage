@@ -10,8 +10,6 @@ import "../Core/Storage/MasterStorage.sol";
 contract StandardTokenDelegate is ERC20, BasicTokenDelegate {
   using SafeMath for uint256;
 
-  function StandardTokenDelegate(MasterStorage store) public BasicTokenDelegate(store) { }
-
     /**
    * @dev Transfer tokens from one address to another
    * @param from address The address which you want to send tokens from

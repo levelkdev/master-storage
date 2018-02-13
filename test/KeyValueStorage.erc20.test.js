@@ -89,8 +89,6 @@ describe('KeyValueStorage Patterns', () => {
 function tokenObject (token) {
   return _.extend(
     token,
-    BasicTokenDelegate.at(token.address),
-    StandardTokenDelegate.at(token.address),
     MintableTokenDelegate.at(token.address)
   )
 }

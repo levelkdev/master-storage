@@ -5,7 +5,6 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "./BasicTokenDelegate.sol";
 import "../Libraries/BasicTokenLib.sol";
 import "../Libraries/StandardTokenLib.sol";
-import "../Core/Storage/KeyValueStorage.sol";
 
 contract StandardTokenDelegate is ERC20, BasicTokenDelegate {
   using SafeMath for uint256;

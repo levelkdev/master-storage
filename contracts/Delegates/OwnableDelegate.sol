@@ -1,6 +1,5 @@
 pragma solidity ^0.4.18;
 
-import "../Core/Storage/KeyValueStorage.sol";
 import "../Core/Storage/StorageState.sol";
 import "../Libraries/OwnableLib.sol";
 

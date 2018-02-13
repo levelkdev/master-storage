@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 import "zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol";
 import "zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../Libraries/BasicTokenLib.sol";
-import "../Core/Storage/MasterStorage.sol";
+import "../Core/Storage/KeyValueStorage.sol";
 import "../Core/Storage/StorageState.sol";
 
 contract BasicTokenDelegate is StorageState, ERC20Basic {

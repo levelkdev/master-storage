@@ -7,7 +7,7 @@ import { web3 } from './helpers/w3'
 
 const accounts = web3.eth.accounts
 
-const MasterStorage = artifacts.require('MasterStorage')
+const KeyValueStorage = artifacts.require('KeyValueStorage')
 const BasicTokenLib = artifacts.require('BasicTokenLib')
 const StandardTokenLib = artifacts.require('StandardTokenLib')
 const MintableTokenLib = artifacts.require('MintableTokenLib')
@@ -18,8 +18,8 @@ const MintableTokenDelegate = artifacts.require('MintableTokenDelegate')
 const MyToken = artifacts.require('MyToken')
 const MyOwnableToken = artifacts.require('MyOwnableToken')
 
-describe('MasterStorage Patterns', () => {
-  describe('creating three tokens that use MasterStorage and MintableTokenDelegate', async () => {
+describe('KeyValueStorage Patterns', () => {
+  describe('creating three tokens that use KeyValueStorage and MintableTokenDelegate', async () => {
     it('should keep separate state for each token', async () => {
       const basicTokenLib = await BasicTokenLib.new()
       const standardTokenLib = await StandardTokenLib.new()
@@ -31,12 +31,12 @@ describe('MasterStorage Patterns', () => {
       MintableTokenDelegate.link('MintableTokenLib', mintableTokenLib.address)
       MintableTokenDelegate.link('OwnableLib', ownableLib.address)
 
-      const masterStorage = await MasterStorage.new()
+      const keyValueStorage = await KeyValueStorage.new()
       const mintableTokenDelegate = await MintableTokenDelegate.new()
 
-      let myToken1 = await MyOwnableToken.new(masterStorage.address, 'MyToken1', 'MTKONE', 18)
-      let myToken2 = await MyOwnableToken.new(masterStorage.address, 'MyToken2', 'MTKTWO', 18)
-      let myToken3 = await MyOwnableToken.new(masterStorage.address, 'MyToken3', 'MTKTHREE', 18)
+      let myToken1 = await MyOwnableToken.new(keyValueStorage.address, 'MyToken1', 'MTKONE', 18)
+      let myToken2 = await MyOwnableToken.new(keyValueStorage.address, 'MyToken2', 'MTKTWO', 18)
+      let myToken3 = await MyOwnableToken.new(keyValueStorage.address, 'MyToken3', 'MTKTHREE', 18)
 
       await myToken1.upgradeTo(mintableTokenDelegate.address)
       await myToken2.upgradeTo(mintableTokenDelegate.address)
@@ -65,11 +65,11 @@ describe('MasterStorage Patterns', () => {
       StandardTokenDelegate.link('BasicTokenLib', basicTokenLib.address)
       StandardTokenDelegate.link('StandardTokenLib', standardTokenLib.address)
 
-      const masterStorage = await MasterStorage.new()
+      const keyValueStorage = await KeyValueStorage.new()
       const basicTokenDelegate = await BasicTokenDelegate.new()
       const standardTokenDelegate = await StandardTokenDelegate.new()
 
-      const myToken = await MyToken.new(masterStorage.address, 'MyToken', 'MTK', 18)
+      const myToken = await MyToken.new(keyValueStorage.address, 'MyToken', 'MTK', 18)
       await myToken.upgradeTo(basicTokenDelegate.address)
       const myTokenBasic = _.extend(myToken, BasicTokenDelegate.at(myToken.address))
 

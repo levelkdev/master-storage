@@ -1,10 +1,10 @@
 pragma solidity ^0.4.18;
 
-import "./MasterStorage.sol";
+import "./KeyValueStorage.sol";
 import "./StorageState.sol";
 
 contract StorageConsumer is StorageState {
-  function StorageConsumer(MasterStorage store) public {
+  function StorageConsumer(KeyValueStorage store) public {
     _storage.store = store;
   }
 }

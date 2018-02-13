@@ -1,9 +1,9 @@
 /* global artifacts */
 
-const MasterStorage = artifacts.require('MasterStorage')
+const KeyValueStorage = artifacts.require('KeyValueStorage')
 
 module.exports = function (deployer) {
   deployer.deploy(
-    MasterStorage
+    KeyValueStorage
   )
 }

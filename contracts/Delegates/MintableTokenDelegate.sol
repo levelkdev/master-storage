@@ -1,6 +1,6 @@
 pragma solidity ^0.4.18;
 
-import "../Core/Storage/MasterStorage.sol";
+import "../Core/Storage/KeyValueStorage.sol";
 import "../Libraries/BasicTokenLib.sol";
 import "../Libraries/MintableTokenLib.sol";
 import "./OwnableDelegate.sol";

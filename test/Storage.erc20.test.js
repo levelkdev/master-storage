@@ -1,7 +1,6 @@
 /* global describe it artifacts beforeEach */
 
 import _ from 'lodash'
-import abi from 'ethereumjs-abi'
 import { expect } from 'chai'
 import { web3 } from './helpers/w3'
 
